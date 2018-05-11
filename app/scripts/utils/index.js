@@ -25,11 +25,29 @@ export function isObject(x) {
 }
 
 export const hasValue = elem => {
-  return !(isUndefined(elem) || elem === null);
+	return !(isUndefined(elem) || elem === null);
 };
 
 export function isEmpty(x) {
 	if (isObject(x) && !Object.keys(x).length) return true;
 	if (Array.isArray(x) && !x.length) return true;
 	return false;
+}
+
+export function getRandomInt(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function getRandomLabelType() {
+	const types = [
+		"primary",
+		"secondary",
+		"success",
+		"danger",
+		"warning",
+		"info",
+		"light",
+		"dark"
+	];
+	return types[getRandomInt(0, types.length-1)]
 }

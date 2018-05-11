@@ -47,12 +47,18 @@ class TaskManager extends Base {
 			const categoryId = task.category;
 			result[categoryId] = isObject(result[categoryId])
 				? result[categoryId]
-				: {tasks:[]};
+				: { tasks: [] };
 			result[categoryId].name = this[categoriesMap][categoryId].name;
 			result[categoryId].index = this[categoriesMap][categoryId].index;
+			result[categoryId].id = this[categoriesMap][categoryId].id;
 			result[categoryId].tasks.push(task);
 		});
 		return result;
+	}
+
+	getTaskDetailsById(id) {
+		if (!id) return {};
+		return this[tasksMap][id];
 	}
 
 	createUser(name) {
@@ -67,8 +73,8 @@ class TaskManager extends Base {
 		return newCategory;
 	}
 
-	createTask(title, description, category, label = [], assignee = []) {
-		const newTask = new Task({ title, description, label, assignee, category });
+	createTask(title, category, description, labels = [], assignees = []) {
+		const newTask = new Task({ title, description, labels, assignees, category });
 		this[tasksMap][newTask.id] = newTask;
 		return newTask;
 	}

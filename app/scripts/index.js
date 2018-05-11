@@ -1,16 +1,11 @@
-require("bootstrap");
-
-import Handlebars from "handlebars";
-import $ from "jquery";
-
-import View from "../views/taskManager.html";
+require("./utils/handlebarHelpers");
 
 import TaskManager from "./core/taskManager";
+import handleTaskView from "./uiHandlers/taskModalHandler";
+import handleTaskManagerView,{handleDragging} from "./uiHandlers/taskManagerHandler";
+import { renderTaskManager } from "./uiHandlers/renderer";
 
-const template = Handlebars.compile(View);
-
-function main() {
-	const tm = new TaskManager("Trello");
+function createDummyTasks(tm) {
 	tm.createCategory("Inbox", 0);
 	tm.createCategory("Intro Call", 1);
 	tm.createCategory("Round 1", 2);
@@ -26,19 +21,24 @@ function main() {
 	tm.createUser("Sandeep");
 	tm.createUser("Vikalp");
 
-	tm.createTask("Candidate1", "inbox mail", 1, ["Analytics"]);
-	tm.createTask("Candidate2", "intro", 2, ["Analytics"]);
-	tm.createTask("Candidate3", "Round 1", 3, ["Orchestration"]);
-	tm.createTask("Candidate4", "Round 1", 3, ["Frontend"]);
-	tm.createTask("Candidate5", "Round 1", 3);
-	tm.createTask("Candidate6", "Round 2", 4);
-	tm.createTask("Candidate7", "Face To Face", 5);
-	return tm;
+	tm.createTask("Candidate1", 1, "inbox mail", ["Analytics"]);
+	tm.createTask("Candidate2", 2, "intro", ["Analytics"]);
+	tm.createTask("Candidate3", 3, "Round 1", ["Orchestration"]);
+	tm.createTask("Candidate4", 3, "Round 1", ["Frontend"]);
+	tm.createTask("Candidate5", 3, "Round 1");
+	tm.createTask("Candidate6", 4, "Round 2");
+	tm.createTask("Candidate7", 5, "Face To Face");
 }
 
-const tm = main();
-window.tm = tm;
-const taskManagerData = Object.values(tm.getTaskByCategories()).sort((a, b) => {
-	return a.index - b.index;
-});
-$("#container").html(template({tasksByCategories:taskManagerData}));
+function init() {
+	const instance = new TaskManager("Trello");
+	createDummyTasks(instance);
+
+	renderTaskManager(instance);
+	handleTaskManagerView(instance);
+	handleTaskView(instance);
+	handleDragging();
+	window.tm = instance;
+}
+
+init();

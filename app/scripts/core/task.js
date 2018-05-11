@@ -7,7 +7,7 @@ class Task extends Base {
 		title: isString,
 		description: isString,
 		duedate: isNumber,
-		label: isArray,
+		labels: isArray,
 		category: isNumber,
 		assignees: isArray
 	};

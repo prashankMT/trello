@@ -2,30 +2,53 @@
     <div class="col-sm">
         <div class="card">
             <div class="card-header">
-                Trello
+                <span class="title">Trello</span>
+                <div class="header-option">
+                    <span class="dropdown-toggle" data-toggle="dropdown">
+		               			<img src="../../dist/images/ham_icon.png" />
+		               		</span>
+                    <div class="dropdown-menu">
+                        <span class="dropdown-item" href="#">Add User</span>
+                        <span class="dropdown-item" href="#">Add Category</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row" id="task-container">
     {{#each tasksByCategories}}
-    <div class="col-sm">
+    <div class="col-sm" data-type="category">
         <div class="card">
             <div class="card-header">{{name}}</div>
             <div class="list-group">
                 {{#each tasks}}
-                <div class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="list-group-item list-group-item-action flex-column align-items-start" data-type="task" data-id={{id}}>
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1">{{title}}</h5>
                         <small>{{duedate}}</small>
                     </div>
-                    <small>{{label}}</small>
+                    {{#each labels}}
+                    <span class="badge badge-{{getRandomLabelType}}">{{this}}</span> {{/each}}
                 </div>
                 {{/each}}
             </div>
             <div class="card-footer text-muted">
-				    	Add a card...
-				  	</div>
+                <div data-type='add-new-task' id='add-new-task-{{id}}' data-id={{id}}>
+                    Add a card...
+                </div>
+                <div class="form-group hide" id="new-task-form-{{id}}">
+                    <input id="new-task-title-{{id}}" data-id={{id}} type="text" class="form-control">
+                    <div>
+                        <button id="add-label-{{id}}" type="button" class="btn btn-outline-dark">
+                            Add
+                        </button>
+                        <button id="cancel-label-creation-{{id}}" type="button" class="btn btn-outline-dark">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     {{/each}}
