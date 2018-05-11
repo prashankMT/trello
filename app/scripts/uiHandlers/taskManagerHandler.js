@@ -33,6 +33,12 @@ function handleTaskManagerView(tm) {
 			toggleAddTaskForm(categoryId, false)
 		);
 	});
+
+	$("#container").on("click", "[data-delete-category]", function(){
+		const categoryId = $(this).data("id");
+		tm.deleteCategory(categoryId);
+		renderTaskManager(tm);
+	})
 }
 
 export function handleDragging(tm) {

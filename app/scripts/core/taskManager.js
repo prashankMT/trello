@@ -43,16 +43,15 @@ class TaskManager extends Base {
 
 	getTaskByCategories() {
 		const result = {};
-		this.tasks.map(task => {
+		this.categories.forEach(({id, name, index}) => {
+			result[id] = { tasks: [], id, name, index };
+		});
+
+		this.tasks.forEach(task => {
 			const categoryId = task.category;
-			result[categoryId] = isObject(result[categoryId])
-				? result[categoryId]
-				: { tasks: [] };
-			result[categoryId].name = this[categoriesMap][categoryId].name;
-			result[categoryId].index = this[categoriesMap][categoryId].index;
-			result[categoryId].id = this[categoriesMap][categoryId].id;
 			result[categoryId].tasks.push(task);
 		});
+
 		return result;
 	}
 
@@ -74,7 +73,13 @@ class TaskManager extends Base {
 	}
 
 	createTask(title, category, description, labels = [], assignees = []) {
-		const newTask = new Task({ title, description, labels, assignees, category });
+		const newTask = new Task({
+			title,
+			description,
+			labels,
+			assignees,
+			category
+		});
 		this[tasksMap][newTask.id] = newTask;
 		return newTask;
 	}

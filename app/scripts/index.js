@@ -6,14 +6,18 @@ import handleTaskView from "./uiHandlers/taskModalHandler";
 import handleTaskManagerView, {
 	handleDragging
 } from "./uiHandlers/taskManagerHandler";
+import { handleUserAdd, handleCategoryAdd } from "./uiHandlers/menuHandlers";
 import { renderTaskManager } from "./uiHandlers/renderer";
 
 function init() {
-	const instance = restoreInstance()
+	const instance = restoreInstance();
 	renderTaskManager(instance);
 	handleTaskManagerView(instance);
 	handleTaskView(instance);
 	handleDragging(instance);
+	handleUserAdd(instance);
+	handleCategoryAdd(instance);
+	
 	window.tm = instance;
 	window.onbeforeunload = function(e) {
 		saveInstance(instance);

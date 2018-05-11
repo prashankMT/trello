@@ -1,4 +1,4 @@
-import { renderTaskManager, updateModalContent, closeTaskModal } from "./renderer";
+import { renderTaskManager, updateTaskModalContent, closeModal } from "./renderer";
 
 function handleTaskView(tm) {
 	$("#modal").on("click", "#add-label", function() {
@@ -14,7 +14,7 @@ function handleTaskView(tm) {
 
 			taskDetails.update({ labels: [...taskDetails.labels, newLabelName] });
 			renderTaskManager(tm);
-			updateModalContent(tm.getTaskDetailsById(taskId));
+			updateTaskModalContent(tm.getTaskDetailsById(taskId));
 		}
 	});
 	$("#modal").on("keypress", "#task-description", function(event) {
@@ -25,13 +25,13 @@ function handleTaskView(tm) {
 			$("#add-label-input").addClass("hide");
 
 			taskDetails.update({ description });
-			updateModalContent(tm.getTaskDetailsById(taskId));
+			updateTaskModalContent(tm.getTaskDetailsById(taskId));
 		}
 	});
 	$("#modal").on("click", "#delete-task", function() {
 		const taskId = $(this).data("id");
 		tm.deleteTask(taskId);
-		closeTaskModal();
+		closeModal();
 		renderTaskManager(tm);
 	});
 }

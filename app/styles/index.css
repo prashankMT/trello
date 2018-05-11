@@ -46,3 +46,10 @@
 	margin-top: 10px;
 	text-align: right;
 }
+.category{
+	min-width: 300px;
+}
+.categories-container{
+	overflow: scroll;
+	flex-wrap: nowrap;
+}

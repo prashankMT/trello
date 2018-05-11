@@ -8,19 +8,24 @@
                                 <img src="../../dist/images/ham_icon.png" />
                             </span>
                     <div class="dropdown-menu">
-                        <span class="dropdown-item" href="#">Add User</span>
-                        <span class="dropdown-item" href="#">Add Category</span>
+                        <span class="dropdown-item" id="add-user">Add User</span>
+                        <span class="dropdown-item" id="add-category">Add Category</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="row" id="task-container">
+<div class="row categories-container" id="task-container">
     {{#each tasksByCategories}}
-    <div class="col-sm" data-category={{id}}>
+    <div class="col-sm category" data-category={{id}}>
         <div class="card">
-            <div class="card-header">{{name}}</div>
+            <div class="card-header">
+                {{name}}
+                <button type="button" data-id={{id}} class="close" data-delete-category id="delete-category-{{id}}">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <div class="list-group" data-droppable>
                 {{#each tasks}}
                 <div data-draggable>
