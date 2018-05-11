@@ -1,5 +1,7 @@
 <div class="modal-header">
-    <h5 class="modal-title">{{title}}</h5>
+    <h5 class="modal-title task-title">
+    <input type="text" class="form-control task-title-input" id="task-title" value={{title}} data-id={{id}} />
+</h5>
     <button type="button" class="close" data-dismiss="modal">
         <span aria-hidden="true">&times;</span>
     </button>
@@ -19,12 +21,14 @@
             <label for="message-text" class="col-form-label">Description:</label>
             <textarea class="form-control" id="task-description" value={{description}}></textarea>
         </div>
-        <div class="form-group">
-            <label for="message-text" class="col-form-label">User:</label>
-            <input type="text" class="form-control" id="recipient-name">
+        <div class="form-group" id="user-options">
+            <select style="display:none" name="" multiple>
+                {{#each users}} {{selected this ../assignees}} {{/each}}
+            </select>
         </div>
     </form>
 </div>
 <div class="modal-footer">
     <button id="delete-task" data-id={{id}} type="button" class="btn btn-secondary">Delete</button>
+    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
 </div>

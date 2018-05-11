@@ -1,4 +1,8 @@
-import { renderTaskManager, updateTaskModalContent, closeModal } from "./renderer";
+import {
+	renderTaskManager,
+	updateTaskModalContent,
+	closeModal
+} from "./renderer";
 
 function handleTaskView(tm) {
 	$("#modal").on("click", "#add-label", function() {
@@ -8,24 +12,27 @@ function handleTaskView(tm) {
 		if (event.keyCode == 13) {
 			const newLabelName = $("#add-label-input").val();
 			const taskId = $("#add-label-input").data("id");
-			const taskDetails = tm.getTaskDetailsById(taskId);
+			let taskDetails = tm.getTaskDetailsById(taskId);
 
 			$("#add-label-input").addClass("hide");
 
 			taskDetails.update({ labels: [...taskDetails.labels, newLabelName] });
 			renderTaskManager(tm);
-			updateTaskModalContent(tm.getTaskDetailsById(taskId));
+			taskDetails = tm.getTaskDetailsById(taskId);
+			updateTaskModalContent({ ...taskDetails, users: tm.users });
 		}
 	});
 	$("#modal").on("keypress", "#task-description", function(event) {
 		if (event.keyCode == 13) {
 			const description = $("#task-description").val();
 			const taskId = $("#add-label-input").data("id");
+			let taskDetails = tm.getTaskDetailsById(taskId);
 
 			$("#add-label-input").addClass("hide");
 
 			taskDetails.update({ description });
-			updateTaskModalContent(tm.getTaskDetailsById(taskId));
+			taskDetails = tm.getTaskDetailsById(taskId);
+			updateTaskModalContent({ ...taskDetails, users: tm.users });
 		}
 	});
 	$("#modal").on("click", "#delete-task", function() {
@@ -33,6 +40,26 @@ function handleTaskView(tm) {
 		tm.deleteTask(taskId);
 		closeModal();
 		renderTaskManager(tm);
+	});
+	$("#modal").on("blur", "#task-title", function() {
+		const title = $(this).val();
+		const taskId = $(this).data("id");
+		const taskDetails = tm.getTaskDetailsById(taskId);
+		taskDetails.update({ title });
+		renderTaskManager(tm);
+	});
+	$(document).on("click.dropdown", function(event) {
+		const users = [];
+		const taskId = $("#modal #task-title").data("id");
+		const taskDetails = tm.getTaskDetailsById(taskId);
+
+		$("#modal .dropdown-chose").each((index, selected) => {
+			users.push(parseInt($(selected).data("value")));
+		});
+
+		taskDetails.update({ assignees: users });
+		renderTaskManager(tm);
+
 	});
 }
 

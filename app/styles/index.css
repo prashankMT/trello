@@ -36,20 +36,39 @@
 
 [data-droppable] {
 	min-height: 10px;
+	max-height: 70vh;
+	overflow: scroll;
 }
 
-.label-container{
-	float: left
+.label-container {
+	float: left;
 }
 
-.add-action-buttons{
+.add-action-buttons {
 	margin-top: 10px;
 	text-align: right;
 }
-.category{
+.category {
 	min-width: 300px;
 }
-.categories-container{
+.categories-container {
 	overflow: scroll;
 	flex-wrap: nowrap;
+	height: 90vh;
+}
+.task-title {
+	width: 90%;
+}
+
+.task-title-input {
+	border: none;
+	width: 100%;
+}
+
+.selectpicker {
+	display: block !important;
+}
+
+.open>.dropdown-menu {
+    display: block;
 }

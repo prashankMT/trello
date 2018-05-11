@@ -28,8 +28,8 @@ export function handleCategoryAdd() {
 	$("#modal").on("click", "#create-category" ,function() {
 		const categoryName = $("#new-category-name").val();
 		const categoryIndex = $("#new-category-index").val();
-		tm.createCategory(categoryName, categoryIndex);
+		tm.createCategory(categoryName, parseInt(categoryIndex));
 		closeModal();
-		renderTaskManager();
+		renderTaskManager(tm);
 	});
 }

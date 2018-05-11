@@ -29,6 +29,10 @@ export function renderTaskModal(data) {
 
 export function openModal() {
 	$("#custom-modal").modal("show");
+	$("#modal-content #user-options").dropdown({
+		multipleMode: "label",
+		searchable: false
+	});
 }
 export function closeModal() {
 	$("#custom-modal").modal("hide");
@@ -40,5 +44,10 @@ export function renderTaskManager(instance) {
 	const taskManagerData = Object.values(tasksByCategory).sort((a, b) => {
 		return a.index - b.index;
 	});
-	$("#container").html(TaskManagerView({ tasksByCategories: taskManagerData }));
+	$("#container").html(
+		TaskManagerView({
+			tasksByCategories: taskManagerData,
+			users: instance.users
+		})
+	);
 }

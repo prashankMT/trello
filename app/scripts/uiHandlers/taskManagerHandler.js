@@ -20,35 +20,37 @@ function handleTaskManagerView(tm) {
 	$("#container").on("click", "[data-type='task']", function() {
 		const taskId = $(this).data("id");
 		const taskDetails = tm.getTaskDetailsById(taskId);
-		renderTaskModal(taskDetails);
+		renderTaskModal({ ...taskDetails, users: tm.users });
 	});
 
 	$("#container").on("click", "[data-type='add-new-task']", function() {
 		const categoryId = $(this).data("id");
 		toggleAddTaskForm(categoryId, true);
-		$(`#add-label-${categoryId}`).off().on("click", () =>
-			addTaskHandler(tm, categoryId)
-		);
-		$(`#cancel-label-creation-${categoryId}`).off().on("click", () =>
-			toggleAddTaskForm(categoryId, false)
-		);
+		$(`#add-label-${categoryId}`)
+			.off()
+			.on("click", () => addTaskHandler(tm, categoryId));
+		$(`#cancel-label-creation-${categoryId}`)
+			.off()
+			.on("click", () => toggleAddTaskForm(categoryId, false));
 	});
 
-	$("#container").on("click", "[data-delete-category]", function(){
+	$("#container").on("click", "[data-delete-category]", function() {
 		const categoryId = $(this).data("id");
 		tm.deleteCategory(categoryId);
 		renderTaskManager(tm);
-	})
+	});
 }
 
 export function handleDragging(tm) {
 	$("[data-droppable]").sortable({
 		connectWith: "[data-droppable]",
 		forceHelperSize: true,
-		receive: (event, ui)=>{
-			const taskId = ui.item.find("[data-type='task']").data("id")
-			const currentCategoryId = ui.item.closest("[data-category]").data("category");
-			tm.getTaskDetailsById(taskId).update({category: currentCategoryId});
+		receive: (event, ui) => {
+			const taskId = ui.item.find("[data-type='task']").data("id");
+			const currentCategoryId = ui.item
+				.closest("[data-category]")
+				.data("category");
+			tm.getTaskDetailsById(taskId).update({ category: currentCategoryId });
 		}
 	});
 }
