@@ -1,4 +1,4 @@
-import { renderTaskManager, updateModalContent } from "./renderer";
+import { renderTaskManager, updateModalContent, closeTaskModal } from "./renderer";
 
 function handleTaskView(tm) {
 	$("#modal").on("click", "#add-label", function() {
@@ -27,6 +27,12 @@ function handleTaskView(tm) {
 			taskDetails.update({ description });
 			updateModalContent(tm.getTaskDetailsById(taskId));
 		}
+	});
+	$("#modal").on("click", "#delete-task", function() {
+		const taskId = $(this).data("id");
+		tm.deleteTask(taskId);
+		closeTaskModal();
+		renderTaskManager(tm);
 	});
 }
 

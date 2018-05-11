@@ -15,6 +15,10 @@ export function renderTaskModal(data) {
 	$("#viewTaskModal").modal("show");
 }
 
+export function closeTaskModal() {
+	$("#viewTaskModal").modal("hide");
+}
+
 export function renderTaskManager(instance) {
 	const tasksByCategory = instance.getTaskByCategories();
 
