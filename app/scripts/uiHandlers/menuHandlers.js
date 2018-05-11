@@ -7,7 +7,7 @@ import {
 } from "./renderer";
 
 export function handleUserAdd(tm) {
-	$("#add-user").on("click", function() {
+	$("#container").on("click","#add-user", function() {
 		updateUserModalContent({});
 		openModal();
 	});
@@ -20,7 +20,7 @@ export function handleUserAdd(tm) {
 }
 
 export function handleCategoryAdd() {
-	$("#add-category").on("click", function() {
+	$("#container").on("click","#add-category", function() {
 		updateCategoryModalContent({});
 		openModal();
 	});

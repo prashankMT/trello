@@ -3,8 +3,39 @@ import {
 	updateTaskModalContent,
 	closeModal
 } from "./renderer";
+import {isEmpty} from "../utils"
 
-function handleTaskView(tm) {
+let updateAssignees = function(tm) {
+	const users = [];
+	const taskId = $("#modal #task-title").data("id");
+	const taskDetails = tm.getTaskDetailsById(taskId);
+	if (!isEmpty(taskDetails)) {
+		const selectedUsers = $("#modal .dropdown-chose");
+		$(selectedUsers).each((index, selected) => {
+			users.push(parseInt($(selected).data("value")));
+		});
+
+		taskDetails.update({ assignees: users });
+	}
+};
+
+function handleTaskAssignees(instance) {
+	const contextualHandler = updateAssignees.bind(this, instance);
+	$("#modal").on("hide.bs.modal", () => {
+		$(document).off("click.dropdown", contextualHandler);
+		$("#modal-content").html("");
+		renderTaskManager(instance);
+	});
+	$("#modal").on("show.bs.modal", () => {
+		$("#modal-content #user-options").dropdown({
+			multipleMode: "label",
+			searchable: false
+		});
+		$(document).on("click.dropdown", contextualHandler);
+	});
+}
+
+function handleAddLabel(tm) {
 	$("#modal").on("click", "#add-label", function() {
 		$("#add-label-input").removeClass("hide");
 	});
@@ -22,6 +53,9 @@ function handleTaskView(tm) {
 			updateTaskModalContent({ ...taskDetails, users: tm.users });
 		}
 	});
+}
+
+function handleDescription(tm) {
 	$("#modal").on("keypress", "#task-description", function(event) {
 		if (event.keyCode == 13) {
 			const description = $("#task-description").val();
@@ -35,12 +69,18 @@ function handleTaskView(tm) {
 			updateTaskModalContent({ ...taskDetails, users: tm.users });
 		}
 	});
+}
+
+function handleDeleteTask(tm) {
 	$("#modal").on("click", "#delete-task", function() {
 		const taskId = $(this).data("id");
 		tm.deleteTask(taskId);
 		closeModal();
 		renderTaskManager(tm);
 	});
+}
+
+function handleTaskTitle(tm) {
 	$("#modal").on("blur", "#task-title", function() {
 		const title = $(this).val();
 		const taskId = $(this).data("id");
@@ -48,6 +88,14 @@ function handleTaskView(tm) {
 		taskDetails.update({ title });
 		renderTaskManager(tm);
 	});
+}
+
+function handleTaskView(tm) {
+	handleAddLabel(tm);
+	handleDescription(tm);
+	handleDeleteTask(tm);
+	handleTaskTitle(tm);
+	handleTaskAssignees(tm);
 }
 
 export default handleTaskView;

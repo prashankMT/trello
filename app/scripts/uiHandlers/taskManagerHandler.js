@@ -10,30 +10,34 @@ function toggleAddTaskForm(categoryId, show = true) {
 	}
 }
 
-function addTaskHandler(tm, categoryId) {
+function addTask(tm, categoryId) {
 	const taskName = $(`#new-task-title-${categoryId}`).val();
 	tm.createTask(taskName, categoryId);
 	renderTaskManager(tm);
 }
 
-function handleTaskManagerView(tm) {
-	$("#container").on("click", "[data-type='task']", function() {
-		const taskId = $(this).data("id");
-		const taskDetails = tm.getTaskDetailsById(taskId);
-		renderTaskModal({ ...taskDetails, users: tm.users });
-	});
-
+function handleAddNewTask(tm) {
 	$("#container").on("click", "[data-type='add-new-task']", function() {
 		const categoryId = $(this).data("id");
 		toggleAddTaskForm(categoryId, true);
 		$(`#add-label-${categoryId}`)
 			.off()
-			.on("click", () => addTaskHandler(tm, categoryId));
+			.on("click", () => addTask(tm, categoryId));
 		$(`#cancel-label-creation-${categoryId}`)
 			.off()
 			.on("click", () => toggleAddTaskForm(categoryId, false));
 	});
+}
 
+function handleTaskEdit(tm) {
+	$("#container").on("click", "[data-type='task']", function() {
+		const taskId = $(this).data("id");
+		const taskDetails = tm.getTaskDetailsById(taskId);
+		renderTaskModal({ ...taskDetails, users: tm.users });
+	});
+}
+
+function handleDeleteCategory(tm) {
 	$("#container").on("click", "[data-delete-category]", function() {
 		const categoryId = $(this).data("id");
 		tm.deleteCategory(categoryId);
@@ -55,4 +59,8 @@ export function handleDragging(tm) {
 	});
 }
 
-export default handleTaskManagerView;
+export default function handleTaskManagerView(tm) {
+	handleTaskEdit(tm);
+	handleAddNewTask(tm);
+	handleDeleteCategory(tm);
+}
