@@ -14,9 +14,9 @@ function createInstance({ tasks = [], categories = [], users = [] }) {
 		instance.createTask(title, category, description, labels, assignees);
 	});
 
-	if (isEmpty(instance.tasks)) {
-		createDummyTasks(instance);
-	}
+	// if (isEmpty(instance.tasks)) {
+	// 	createDummyTasks(instance);
+	// }
 
 	return instance;
 }

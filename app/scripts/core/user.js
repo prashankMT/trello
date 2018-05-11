@@ -19,9 +19,11 @@ class User extends Base {
 
 	[getInitials]() {
 		const nameArray = this.name.split(" ");
-		return nameArray.length > 1
-			? `${nameArray[0][0]}${nameArray[1][0]}`
-			: `${nameArray[0][0]}${nameArray[0][1]}`;
+		const initial =
+			nameArray.length > 1
+				? `${nameArray[0][0]}${nameArray[1][0]}`
+				: `${nameArray[0][0]}${nameArray[0][1]}`;
+		return initial.toUpperCase();
 	}
 
 	getDetails() {

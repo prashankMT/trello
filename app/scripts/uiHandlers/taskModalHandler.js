@@ -48,19 +48,6 @@ function handleTaskView(tm) {
 		taskDetails.update({ title });
 		renderTaskManager(tm);
 	});
-	$(document).on("click.dropdown", function(event) {
-		const users = [];
-		const taskId = $("#modal #task-title").data("id");
-		const taskDetails = tm.getTaskDetailsById(taskId);
-
-		$("#modal .dropdown-chose").each((index, selected) => {
-			users.push(parseInt($(selected).data("value")));
-		});
-
-		taskDetails.update({ assignees: users });
-		renderTaskManager(tm);
-
-	});
 }
 
 export default handleTaskView;

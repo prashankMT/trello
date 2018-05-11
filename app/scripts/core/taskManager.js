@@ -43,13 +43,16 @@ class TaskManager extends Base {
 
 	getTaskByCategories() {
 		const result = {};
-		this.categories.forEach(({id, name, index}) => {
+		this.categories.forEach(({ id, name, index }) => {
 			result[id] = { tasks: [], id, name, index };
 		});
 
 		this.tasks.forEach(task => {
 			const categoryId = task.category;
-			result[categoryId].tasks.push(task);
+			const assigneesDetails = task.assignees.map(userId => {
+				return this[usersMap][userId];
+			});
+			result[categoryId].tasks.push({...task, assignees:assigneesDetails});
 		});
 
 		return result;
