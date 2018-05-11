@@ -7,7 +7,7 @@ function handleTaskView(tm) {
 	$("#modal").on("keypress", "#add-label-input", function(event) {
 		if (event.keyCode == 13) {
 			const newLabelName = $("#add-label-input").val();
-			const taskId = $("[data-type='task']").data("id");
+			const taskId = $("#add-label-input").data("id");
 			const taskDetails = tm.getTaskDetailsById(taskId);
 
 			$("#add-label-input").addClass("hide");
@@ -20,7 +20,7 @@ function handleTaskView(tm) {
 	$("#modal").on("keypress", "#task-description", function(event) {
 		if (event.keyCode == 13) {
 			const description = $("#task-description").val();
-			const taskId = $("[data-type='task']").data("id");
+			const taskId = $("#add-label-input").data("id");
 
 			$("#add-label-input").addClass("hide");
 

@@ -33,3 +33,16 @@
 .hide {
 	display: none;
 }
+
+[data-droppable] {
+	min-height: 10px;
+}
+
+.label-container{
+	float: left
+}
+
+.add-action-buttons{
+	margin-top: 10px;
+	text-align: right;
+}

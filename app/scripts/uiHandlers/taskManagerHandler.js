@@ -26,18 +26,24 @@ function handleTaskManagerView(tm) {
 	$("#container").on("click", "[data-type='add-new-task']", function() {
 		const categoryId = $(this).data("id");
 		toggleAddTaskForm(categoryId, true);
-		$(`#add-label-${categoryId}`).on("click", () =>
+		$(`#add-label-${categoryId}`).off().on("click", () =>
 			addTaskHandler(tm, categoryId)
 		);
-		$(`#cancel-label-creation-${categoryId}`).on("click", () =>
+		$(`#cancel-label-creation-${categoryId}`).off().on("click", () =>
 			toggleAddTaskForm(categoryId, false)
 		);
 	});
 }
 
-export function handleDragging() {
-	$("[data-type='task']").sortable({
-		connectWith: "[data-type='category']"
+export function handleDragging(tm) {
+	$("[data-droppable]").sortable({
+		connectWith: "[data-droppable]",
+		forceHelperSize: true,
+		receive: (event, ui)=>{
+			const taskId = ui.item.find("[data-type='task']").data("id")
+			const currentCategoryId = ui.item.closest("[data-category]").data("category");
+			tm.getTaskDetailsById(taskId).update({category: currentCategoryId});
+		}
 	});
 }
 
