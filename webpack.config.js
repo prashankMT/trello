@@ -1,4 +1,7 @@
 const path = require("path");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
 module.exports = {
   entry: path.resolve(__dirname, "app/scripts/index.js"),
   output: {
@@ -38,6 +41,28 @@ module.exports = {
     alias: {
       handlebars: "handlebars/dist/handlebars.min.js"
     }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve("./app/index.tmpl.ejs"),
+      cache: true,
+      inject: true
+    }),
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve("./app/vendors"),
+        to: path.resolve("./dist/vendors")
+      },
+      {
+        from: path.resolve("./app/styles"),
+        to: path.resolve("./dist/styles")
+      }
+    ])
+  ],
+  devServer: {
+    port: 9000,
+    historyApiFallback: true,
+    disableHostCheck: true
   },
   devtool: "source-map"
 };

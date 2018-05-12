@@ -29,6 +29,7 @@ class Base {
 			}
 			this[prop] = props[prop];
 		});
+		return this;
 	}
 }
 

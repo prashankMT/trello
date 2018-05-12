@@ -3,35 +3,59 @@ import {
 	updateTaskModalContent,
 	closeModal
 } from "./renderer";
-import {isEmpty} from "../utils"
+import { isEmpty } from "../utils";
 
-let updateAssignees = function(tm) {
+const getAssignees = () => {
 	const users = [];
+	const selectedUsers = $("#modal .dropdown-chose");
+	$(selectedUsers).each((index, selected) => {
+		users.push(parseInt($(selected).data("value")));
+	});
+	return users;
+};
+
+const getTitle = () => {
+	return $("#modal #task-title").val();
+};
+
+const getDescription = () => {
+	return $("#task-description").val();
+};
+
+const getTaskRef = () => {
 	const taskId = $("#modal #task-title").data("id");
 	const taskDetails = tm.getTaskDetailsById(taskId);
-	if (!isEmpty(taskDetails)) {
-		const selectedUsers = $("#modal .dropdown-chose");
-		$(selectedUsers).each((index, selected) => {
-			users.push(parseInt($(selected).data("value")));
-		});
+	return taskDetails;
+};
 
-		taskDetails.update({ assignees: users });
+const handleTaskContent = function() {
+	const taskDetails = getTaskRef();
+	if (taskDetails) {
+		const updatedTask = {};
+		updatedTask.assignees = getAssignees();
+		updatedTask.title = getTitle();
+		updatedTask.description = getDescription();
+		taskDetails.update(updatedTask);
+
 	}
 };
 
-function handleTaskAssignees(instance) {
-	const contextualHandler = updateAssignees.bind(this, instance);
+function handleTaskUpdation(instance) {
+	const contextualHandler = handleTaskContent.bind(this, instance);
 	$("#modal").on("hide.bs.modal", () => {
-		$(document).off("click.dropdown", contextualHandler);
-		$("#modal-content").html("");
+		contextualHandler();
 		renderTaskManager(instance);
 	});
-	$("#modal").on("show.bs.modal", () => {
-		$("#modal-content #user-options").dropdown({
-			multipleMode: "label",
-			searchable: false
-		});
-		$(document).on("click.dropdown", contextualHandler);
+	$("#modal").on("hidden.bs.modal", () => {
+		$("#modal-content").html("");
+	});
+	$("#modal").on("shown.bs.modal", () => {
+		if (!$(".dropdown-display-label").length) {
+			$("#modal-content #user-options").dropdown({
+				multipleMode: "label",
+				searchable: false
+			});
+		}
 	});
 }
 
@@ -42,30 +66,10 @@ function handleAddLabel(tm) {
 	$("#modal").on("keypress", "#add-label-input", function(event) {
 		if (event.keyCode == 13) {
 			const newLabelName = $("#add-label-input").val();
-			const taskId = $("#add-label-input").data("id");
-			let taskDetails = tm.getTaskDetailsById(taskId);
-
 			$("#add-label-input").addClass("hide");
 
-			taskDetails.update({ labels: [...taskDetails.labels, newLabelName] });
-			renderTaskManager(tm);
-			taskDetails = tm.getTaskDetailsById(taskId);
-			updateTaskModalContent({ ...taskDetails, users: tm.users });
-		}
-	});
-}
-
-function handleDescription(tm) {
-	$("#modal").on("keypress", "#task-description", function(event) {
-		if (event.keyCode == 13) {
-			const description = $("#task-description").val();
-			const taskId = $("#add-label-input").data("id");
-			let taskDetails = tm.getTaskDetailsById(taskId);
-
-			$("#add-label-input").addClass("hide");
-
-			taskDetails.update({ description });
-			taskDetails = tm.getTaskDetailsById(taskId);
+			let taskDetails = getTaskRef();
+			taskDetails = taskDetails.update({ labels: [...taskDetails.labels, newLabelName] });
 			updateTaskModalContent({ ...taskDetails, users: tm.users });
 		}
 	});
@@ -80,22 +84,10 @@ function handleDeleteTask(tm) {
 	});
 }
 
-function handleTaskTitle(tm) {
-	$("#modal").on("blur", "#task-title", function() {
-		const title = $(this).val();
-		const taskId = $(this).data("id");
-		const taskDetails = tm.getTaskDetailsById(taskId);
-		taskDetails.update({ title });
-		renderTaskManager(tm);
-	});
-}
-
 function handleTaskView(tm) {
 	handleAddLabel(tm);
-	handleDescription(tm);
 	handleDeleteTask(tm);
-	handleTaskTitle(tm);
-	handleTaskAssignees(tm);
+	handleTaskUpdation(tm);
 }
 
 export default handleTaskView;
