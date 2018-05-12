@@ -31,7 +31,7 @@ const getTaskRef = () => {
 
 const handleTaskContent = function() {
 	const taskDetails = getTaskRef();
-	if (taskDetails) {
+	if (!isEmpty(taskDetails)) {
 		const updatedTask = {};
 		updatedTask.assignees = getAssignees();
 		updatedTask.title = getTitle();

@@ -45,20 +45,6 @@ function handleDeleteCategory(tm) {
 	});
 }
 
-export function handleDragging(tm) {
-	$("[data-droppable]").sortable({
-		connectWith: "[data-droppable]",
-		forceHelperSize: true,
-		receive: (event, ui) => {
-			const taskId = ui.item.find("[data-type='task']").data("id");
-			const currentCategoryId = ui.item
-				.closest("[data-category]")
-				.data("category");
-			tm.getTaskDetailsById(taskId).update({ category: currentCategoryId });
-		}
-	});
-}
-
 export default function handleTaskManagerView(tm) {
 	handleTaskEdit(tm);
 	handleAddNewTask(tm);

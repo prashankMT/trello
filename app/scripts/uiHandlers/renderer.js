@@ -10,6 +10,20 @@ const TaskModalView = Handlebars.compile(TaskModal);
 const UserModalView = Handlebars.compile(UserModal);
 const CategoryModalView = Handlebars.compile(CategoryModal);
 
+function handleDragging(tm) {
+	$("[data-droppable]").sortable({
+		connectWith: "[data-droppable]",
+		forceHelperSize: true,
+		receive: (event, ui) => {
+			const taskId = ui.item.find("[data-type='task']").data("id");
+			const currentCategoryId = ui.item
+				.closest("[data-category]")
+				.data("category");
+			tm.getTaskDetailsById(taskId).update({ category: currentCategoryId });
+		}
+	});
+}
+
 export function updateTaskModalContent(data) {
 	$("#modal-content").html(TaskModalView(data));
 }
@@ -56,4 +70,5 @@ export function renderTaskManager(instance) {
 			users: instance.users
 		})
 	);
+	handleDragging(instance);
 }
