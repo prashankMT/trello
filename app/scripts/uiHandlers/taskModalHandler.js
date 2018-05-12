@@ -31,7 +31,7 @@ const getTaskRef = () => {
 
 const handleTaskContent = function() {
 	const taskDetails = getTaskRef();
-	if (!isEmpty(taskDetails)) {
+	if (taskDetails.id) {
 		const updatedTask = {};
 		updatedTask.assignees = getAssignees();
 		updatedTask.title = getTitle();
@@ -67,7 +67,7 @@ function handleAddLabel(tm) {
 			taskDetails = taskDetails.update({
 				labels: [...taskDetails.labels, newLabelName]
 			});
-			handleTaskUpdation(tm);
+			handleTaskContent(tm);
 			updateTaskModalContent({ ...taskDetails, users: tm.users });
 			renderUserMultiselectDD();
 		}
