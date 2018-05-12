@@ -29,6 +29,15 @@ export function closeModal() {
 	$("#custom-modal").modal("hide");
 }
 
+export function renderUserMultiselectDD() {
+	if (!$(".dropdown-display-label").length) {
+		$("#modal-content #user-options").dropdown({
+			multipleMode: "label",
+			searchable: false
+		});
+	}
+}
+
 export function renderTaskModal(data) {
 	updateTaskModalContent(data);
 	openModal();

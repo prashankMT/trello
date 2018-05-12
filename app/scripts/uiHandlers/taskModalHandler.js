@@ -1,7 +1,8 @@
 import {
 	renderTaskManager,
 	updateTaskModalContent,
-	closeModal
+	closeModal,
+	renderUserMultiselectDD
 } from "./renderer";
 import { isEmpty } from "../utils";
 
@@ -36,7 +37,6 @@ const handleTaskContent = function() {
 		updatedTask.title = getTitle();
 		updatedTask.description = getDescription();
 		taskDetails.update(updatedTask);
-
 	}
 };
 
@@ -50,12 +50,7 @@ function handleTaskUpdation(instance) {
 		$("#modal-content").html("");
 	});
 	$("#modal").on("shown.bs.modal", () => {
-		if (!$(".dropdown-display-label").length) {
-			$("#modal-content #user-options").dropdown({
-				multipleMode: "label",
-				searchable: false
-			});
-		}
+		renderUserMultiselectDD();
 	});
 }
 
@@ -69,8 +64,12 @@ function handleAddLabel(tm) {
 			$("#add-label-input").addClass("hide");
 
 			let taskDetails = getTaskRef();
-			taskDetails = taskDetails.update({ labels: [...taskDetails.labels, newLabelName] });
+			taskDetails = taskDetails.update({
+				labels: [...taskDetails.labels, newLabelName]
+			});
+			handleTaskUpdation(tm);
 			updateTaskModalContent({ ...taskDetails, users: tm.users });
+			renderUserMultiselectDD();
 		}
 	});
 }
